@@ -1,0 +1,49 @@
+/* ============================================================
+   FreshLink — Design Tokens
+   Premium green palette, inspired by Blinkit/Instamart quality
+   ============================================================ */
+
+:root {
+  /* ── Brand Colors ── */
+  --forest:  #1a4a1f;
+  --fern:    #2d7a35;
+  --leaf:    #3da832;
+  --lime:    #e8f5e2;
+  --sage:    #6aab5e;
+  --mint:    #a8d5a2;
+
+  /* ── Neutrals ── */
+  --ink:     #111b13;
+  --charcoal:#2a3d2c;
+  --mist:    #6b7d6e;
+  --linen:   #dde8d8;
+  --cream:   #f4f8f2;
+  --ivory:   #fafcf8;
+  --white:   #ffffff;
+
+  /* ── Accents ── */
+  --amber:   #f5a623;
+  --gold:    #e8952a;
+  --coral:   #e8534a;
+  --swamp:   #0d2410;
+
+  /* ── Typography ── */
+  --font-serif: 'Cormorant Garant', Georgia, serif;
+  --font-sans:  'Outfit', 'Segoe UI', sans-serif;
+
+  /* ── Radii ── */
+  --r4:  4px;   --r8: 8px;   --r12: 12px;
+  --r16: 16px;  --r24: 24px; --r32: 32px;
+
+  /* ── Shadows ── */
+  --shadow-xs: 0 1px 3px rgba(0,0,0,.06);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.10);
+  --shadow-lg: 0 8px 28px rgba(0,0,0,.12);
+  --shadow-xl: 0 16px 48px rgba(0,0,0,.18);
+
+  /* ── Motion ── */
+  --dur:      0.22s;
+  --ease:     cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
