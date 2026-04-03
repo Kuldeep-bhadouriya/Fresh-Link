@@ -5,7 +5,7 @@
 
 const STORE_NAME      = 'FreshLink';
 const MP_CITIES       = ['Bhopal','Indore','Jabalpur','Gwalior','Ujjain','Sagar','Rewa','Satna','Dewas','Ratlam'];
-const WHATSAPP_NUMBER = '9424740903';
+const WHATSAPP_NUMBER = '919424740903';
 const UPI_ID          = 'yourbusiness@okicici';
 const UPI_NAME        = 'FreshLink Store';
 
