@@ -19,6 +19,7 @@ async function sha256(msg) {
 }
 
 async function doAdminLogin() {
+  console.log('doAdminLogin called');
   const now = Date.now();
   if (now < lockedUntil) {
     showLoginErr(`Too many attempts. Try again in ${Math.ceil((lockedUntil-now)/60000)} min.`, 'limit');
@@ -26,14 +27,19 @@ async function doAdminLogin() {
   }
   const user = document.getElementById('adminUser').value.trim();
   const pass = document.getElementById('adminPass').value;
+  console.log('user:', user, 'pass length:', pass.length);
   const hash = await sha256(pass);
+  console.log('hash:', hash);
+  console.log('ADMIN_USER:', ADMIN_USER, 'ADMIN_PASS_HASH:', ADMIN_PASS_HASH);
 
   if (user === ADMIN_USER && hash === ADMIN_PASS_HASH) {
+    console.log('Login successful');
     loginTries = 0;
     document.getElementById('adminLogin').style.display = 'none';
     document.getElementById('adminDashboard').style.display = 'flex';
     await initAdmin();
   } else {
+    console.log('Login failed');
     loginTries++;
     if (loginTries >= MAX_LOGIN_TRIES) {
       lockedUntil = Date.now() + LOCKOUT_MS;
@@ -324,13 +330,13 @@ function getVal(id) { const el = document.getElementById(id); return el ? el.val
 function setVal(id, val) { const el = document.getElementById(id); if(el) el.value = val ?? ''; }
 function openModal(id) { const el = document.getElementById(id); if(el) el.classList.add('show'); }
 function closeModal(id) { const el = document.getElementById(id); if(el) el.classList.remove('show'); }
-let toastTimer;
+let adminToastTimer;
 function adminToast(msg) {
   const t = document.getElementById('adminToast');
   if (!t) return;
-  clearTimeout(toastTimer);
+  clearTimeout(adminToastTimer);
   t.textContent = msg; t.style.opacity = '1'; t.style.transform = 'translateY(0)';
-  toastTimer = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(10px)'; }, 3000);
+  adminToastTimer = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(10px)'; }, 3000);
 }
 
 /* ── On load ── */

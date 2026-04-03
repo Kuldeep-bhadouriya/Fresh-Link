@@ -10,8 +10,8 @@ const UPI_ID          = 'yourbusiness@okicici';
 const UPI_NAME        = 'FreshLink Store';
 
 /* Admin */
-const ADMIN_USER      = 'admin';
-const ADMIN_PASS_HASH = '8acb6ebeecc22650059b023f790eb216caaeaface3644fcf629dc0ef8c3395c3';
+const ADMIN_USER      = 'freshlink';
+const ADMIN_PASS_HASH = 'a0882111c05e913ee928b9352340afce1ef45839a587e08485df2540d3197207';
 const MAX_LOGIN_TRIES = 5;
 const LOCKOUT_MS      = 5 * 60 * 1000;
 
