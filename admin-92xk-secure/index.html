@@ -1,453 +1,852 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow" />
-  <title>FreshLink — Admin Console</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/variables.css" />
-  <link rel="stylesheet" href="../css/admin.css" />
-  <script src="https://unpkg.com/lucide@0.383.0/dist/umd/lucide.min.js" defer></script>
-</head>
-<body>
-
-<!-- ====== LOGIN ====== -->
-<div class="admin-login" id="adminLogin">
-  <div class="admin-login-card">
-    <div class="admin-login-logo">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="12" fill="#1a4a1f"/><path d="M22 12c1.5 3 4 5 8 6-2 5-5 8-8 10-3-2-6-5-8-10 4-1 6.5-3 8-6z" fill="#3da832" opacity=".9"/></svg>
-      <div style="font-family:'Cormorant Garant',serif;font-size:22px;font-weight:700;color:#6bbf5c;margin-top:10px">FreshLink</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.25);letter-spacing:2px;text-transform:uppercase">CONSOLE</div>
-    </div>
-    <h1 class="admin-login-title">Welcome Back</h1>
-    <p class="admin-login-sub">Sign in to manage your store</p>
-    <div class="admin-login-err" id="loginErr"></div>
-    <div class="admin-login-limit" id="loginLimit"></div>
-    <div class="aform-group">
-      <label class="aform-label" for="adminUser">Username</label>
-      <input class="aform-input" id="adminUser" type="text" placeholder="admin" autocomplete="username" />
-    </div>
-    <div class="aform-group">
-      <label class="aform-label" for="adminPass">Password</label>
-      <input class="aform-input" id="adminPass" type="password" placeholder="••••••••" autocomplete="current-password" />
-    </div>
-    <button class="abtn abtn-primary" style="width:100%;padding:14px;font-size:15px;margin-top:8px;border-radius:12px;justify-content:center" onclick="doAdminLogin()">
-      Sign In →
-    </button>
-    <a href="../public/index.html" style="display:block;text-align:center;font-size:13px;color:rgba(255,255,255,.3);margin-top:20px;text-decoration:none;transition:color .2s" onmouseover="this.style.color='rgba(255,255,255,.6)'" onmouseout="this.style.color='rgba(255,255,255,.3)'">
-      ← Return to Website
-    </a>
-  </div>
-</div>
-
-<!-- ====== DASHBOARD ====== -->
-<div class="admin-overlay" id="adminDashboard" style="display:none">
-
-  <!-- Sidebar -->
-  <aside class="admin-sidebar">
-    <div class="admin-sidebar-logo">
-      <div class="brand">FreshLink</div>
-      <span class="console-tag">Admin Console</span>
-    </div>
-    <nav class="admin-nav">
-      <div class="admin-nav-label">Navigation</div>
-      <div class="admin-nav-item active" id="nav_dash" onclick="showAdminView('dash')" role="button" tabindex="0">
-        <i data-lucide="layout-dashboard" style="width:15px"></i> Dashboard
-      </div>
-      <div class="admin-nav-item" id="nav_products" onclick="showAdminView('products')" role="button" tabindex="0">
-        <i data-lucide="package" style="width:15px"></i> Products
-      </div>
-      <div class="admin-nav-item" id="nav_settings" onclick="showAdminView('settings')" role="button" tabindex="0">
-        <i data-lucide="settings" style="width:15px"></i> Settings
-      </div>
-      <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px">
-        <div class="admin-nav-label">Quick Add</div>
-        <div class="admin-nav-item" onclick="openAddProduct()" role="button" tabindex="0">
-          <i data-lucide="plus-circle" style="width:15px"></i> Add Product
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>FreshLink — Admin Console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/admin.css" />
+    <script
+      src="https://unpkg.com/lucide@0.383.0/dist/umd/lucide.min.js"
+      defer
+    ></script>
+  </head>
+  <body>
+    <!-- ====== LOGIN ====== -->
+    <div class="admin-login" id="adminLogin">
+      <div class="admin-login-card">
+        <div class="admin-login-logo">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <rect width="44" height="44" rx="12" fill="#1a4a1f" />
+            <path
+              d="M22 12c1.5 3 4 5 8 6-2 5-5 8-8 10-3-2-6-5-8-10 4-1 6.5-3 8-6z"
+              fill="#3da832"
+              opacity=".9"
+            />
+          </svg>
+          <div
+            style="
+              font-family: &quot;Cormorant Garant&quot;, serif;
+              font-size: 22px;
+              font-weight: 700;
+              color: #6bbf5c;
+              margin-top: 10px;
+            "
+          >
+            FreshLink
+          </div>
+          <div
+            style="
+              font-size: 11px;
+              color: rgba(255, 255, 255, 0.25);
+              letter-spacing: 2px;
+              text-transform: uppercase;
+            "
+          >
+            CONSOLE
+          </div>
         </div>
-      </div>
-    </nav>
-    <div class="admin-sidebar-footer">
-      <div class="gsheet-status" style="margin-bottom:12px;padding:0 4px">
-        <div class="gsheet-dot disconnected" id="gsheetDot"></div>
-        <span id="gsheetText" style="font-size:11px;color:rgba(255,255,255,.3)">Checking…</span>
-      </div>
-      <button class="admin-logout-btn" onclick="adminLogout()">
-        <i data-lucide="log-out" style="width:15px"></i> Logout
-      </button>
-    </div>
-  </aside>
-
-  <!-- Main -->
-  <main class="admin-main">
-
-    <!-- Topbar -->
-    <div class="admin-topbar">
-      <div>
-        <div class="admin-topbar-title" id="viewTitle">Dashboard</div>
-        <div class="admin-topbar-sub" id="viewSub">Welcome back! Here's your store overview.</div>
-      </div>
-      <div class="topbar-actions">
-        <div class="gsheet-status" id="syncIndicator" style="display:none">
-          <div class="gsheet-dot syncing" id="topSyncDot"></div>
-          <span style="font-size:12px;color:rgba(255,255,255,.4)">Syncing…</span>
+        <h1 class="admin-login-title">Welcome Back</h1>
+        <p class="admin-login-sub">Sign in to manage your store</p>
+        <div class="admin-login-err" id="loginErr"></div>
+        <div class="admin-login-limit" id="loginLimit"></div>
+        <div class="aform-group">
+          <label class="aform-label" for="adminUser">Username</label>
+          <input
+            class="aform-input"
+            id="adminUser"
+            type="text"
+            placeholder="admin"
+            autocomplete="username"
+          />
         </div>
-        <button class="abtn abtn-ghost" onclick="syncFromSheet()" id="syncBtn" title="Sync from Google Sheets">
-          <i data-lucide="refresh-cw" style="width:14px"></i> Sync
+        <div class="aform-group">
+          <label class="aform-label" for="adminPass">Password</label>
+          <input
+            class="aform-input"
+            id="adminPass"
+            type="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          />
+        </div>
+        <button
+          class="abtn abtn-primary"
+          style="
+            width: 100%;
+            padding: 14px;
+            font-size: 15px;
+            margin-top: 8px;
+            border-radius: 12px;
+            justify-content: center;
+          "
+          onclick="doAdminLogin()"
+        >
+          Sign In →
         </button>
-        <button class="abtn abtn-primary" onclick="openAddProduct()">
-          <i data-lucide="plus" style="width:14px"></i> Add Product
-        </button>
+        <a
+          href="../public/index.html"
+          style="
+            display: block;
+            text-align: center;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.3);
+            margin-top: 20px;
+            text-decoration: none;
+            transition: color 0.2s;
+          "
+          onmouseover="this.style.color = 'rgba(255,255,255,.6)'"
+          onmouseout="this.style.color = 'rgba(255,255,255,.3)'"
+        >
+          ← Return to Website
+        </a>
       </div>
     </div>
 
-    <!-- ====== DASHBOARD VIEW ====== -->
-    <div id="view_dash" class="admin-content">
-
-      <!-- Stats -->
-      <div class="stat-grid">
-        <div class="stat-card">
-          <div class="stat-label">Total Products</div>
-          <div class="stat-value" id="stat_products">—</div>
-          <div class="stat-sub">In catalogue</div>
-          <span class="stat-icon">📦</span>
+    <!-- ====== DASHBOARD ====== -->
+    <div class="admin-overlay" id="adminDashboard" style="display: none">
+      <!-- Sidebar -->
+      <aside class="admin-sidebar">
+        <div class="admin-sidebar-logo">
+          <div class="brand">FreshLink</div>
+          <span class="console-tag">Admin Console</span>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Vegetables</div>
-          <div class="stat-value" id="stat_veg">—</div>
-          <div class="stat-sub">Categories listed</div>
-          <span class="stat-icon">🥕</span>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Fruits</div>
-          <div class="stat-value" id="stat_fruit">—</div>
-          <div class="stat-sub">Categories listed</div>
-          <span class="stat-icon">🍎</span>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Organic Tagged</div>
-          <div class="stat-value" id="stat_organic">—</div>
-          <div class="stat-sub">With organic badge</div>
-          <span class="stat-icon">🌿</span>
-        </div>
-      </div>
-
-      <!-- Quick actions -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px">
-        <div class="admin-panel">
-          <div class="admin-panel-head">
-            <span class="admin-panel-title">☁️ Google Sheets Sync</span>
+        <nav class="admin-nav">
+          <div class="admin-nav-label">Navigation</div>
+          <div
+            class="admin-nav-item active"
+            id="nav_dash"
+            onclick="showAdminView('dash')"
+            role="button"
+            tabindex="0"
+          >
+            <i data-lucide="layout-dashboard" style="width: 15px"></i> Dashboard
           </div>
-          <div class="admin-panel-body">
-            <p style="font-size:13px;color:rgba(255,255,255,.45);line-height:1.6;margin-bottom:16px">
-              Connect to a Google Sheet so your product prices and images stay in sync across all devices — no backend needed.
-            </p>
-            <div style="display:flex;gap:8px">
-              <button class="abtn abtn-primary" onclick="syncFromSheet()"><i data-lucide="download" style="width:13px"></i> Pull from Sheet</button>
-              <button class="abtn abtn-ghost"   onclick="syncToSheet()"><i data-lucide="upload" style="width:13px"></i> Push to Sheet</button>
-            </div>
-            <div style="margin-top:14px;padding:12px;background:rgba(255,255,255,.04);border-radius:8px;font-size:12px;color:rgba(255,255,255,.35);line-height:1.6">
-              ➡️ Go to <strong style="color:rgba(255,255,255,.5)">Settings</strong> to connect your Google Sheet URL.
+          <div
+            class="admin-nav-item"
+            id="nav_products"
+            onclick="showAdminView('products')"
+            role="button"
+            tabindex="0"
+          >
+            <i data-lucide="package" style="width: 15px"></i> Products
+          </div>
+          <div
+            class="admin-nav-item"
+            id="nav_settings"
+            onclick="showAdminView('settings')"
+            role="button"
+            tabindex="0"
+          >
+            <i data-lucide="settings" style="width: 15px"></i> Settings
+          </div>
+          <div
+            style="
+              margin-top: 16px;
+              border-top: 1px solid rgba(255, 255, 255, 0.07);
+              padding-top: 16px;
+            "
+          >
+            <div class="admin-nav-label">Quick Add</div>
+            <div
+              class="admin-nav-item"
+              onclick="openAddProduct()"
+              role="button"
+              tabindex="0"
+            >
+              <i data-lucide="plus-circle" style="width: 15px"></i> Add Product
             </div>
           </div>
+        </nav>
+        <div class="admin-sidebar-footer">
+          <div
+            class="gsheet-status"
+            style="margin-bottom: 12px; padding: 0 4px"
+          >
+            <div class="gsheet-dot disconnected" id="gsheetDot"></div>
+            <span
+              id="gsheetText"
+              style="font-size: 11px; color: rgba(255, 255, 255, 0.3)"
+              >Checking…</span
+            >
+          </div>
+          <button class="admin-logout-btn" onclick="adminLogout()">
+            <i data-lucide="log-out" style="width: 15px"></i> Logout
+          </button>
         </div>
+      </aside>
 
-        <div class="admin-panel">
-          <div class="admin-panel-head"><span class="admin-panel-title">🛍️ Quick Actions</span></div>
-          <div class="admin-panel-body" style="display:flex;flex-direction:column;gap:10px">
-            <button class="abtn abtn-primary" onclick="openAddProduct()" style="justify-content:flex-start">
-              <i data-lucide="plus-circle" style="width:14px"></i> Add New Product
+      <!-- Main -->
+      <main class="admin-main">
+        <!-- Topbar -->
+        <div class="admin-topbar">
+          <div>
+            <div class="admin-topbar-title" id="viewTitle">Dashboard</div>
+            <div class="admin-topbar-sub" id="viewSub">
+              Welcome back! Here's your store overview.
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <div class="gsheet-status" id="syncIndicator" style="display: none">
+              <div class="gsheet-dot syncing" id="topSyncDot"></div>
+              <span style="font-size: 12px; color: rgba(255, 255, 255, 0.4)"
+                >Syncing…</span
+              >
+            </div>
+            <button
+              class="abtn abtn-ghost"
+              onclick="syncFromSheet()"
+              id="syncBtn"
+              title="Sync from Google Sheets"
+            >
+              <i data-lucide="refresh-cw" style="width: 14px"></i> Sync
             </button>
-            <a href="../public/shop.html" target="_blank" style="text-decoration:none">
-              <button class="abtn abtn-ghost" style="width:100%;justify-content:flex-start">
-                <i data-lucide="external-link" style="width:14px"></i> Preview Shop
-              </button>
-            </a>
-            <a href="../public/index.html" target="_blank" style="text-decoration:none">
-              <button class="abtn abtn-ghost" style="width:100%;justify-content:flex-start">
-                <i data-lucide="home" style="width:14px"></i> Preview Homepage
-              </button>
-            </a>
-            <button class="abtn abtn-amber" onclick="showAdminView('products')" style="justify-content:flex-start">
-              <i data-lucide="edit-3" style="width:14px"></i> Edit All Prices
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Recent products -->
-      <div class="admin-table-wrap">
-        <div class="admin-table-head">
-          <span class="admin-table-title">Recent Products</span>
-          <button class="abtn abtn-ghost abtn-sm" onclick="showAdminView('products')">View All →</button>
-        </div>
-        <div style="padding:0 24px" id="recentProds"></div>
-      </div>
-    </div>
-
-    <!-- ====== PRODUCTS VIEW ====== -->
-    <div id="view_products" class="admin-content" style="display:none">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap">
-        <div style="display:flex;align-items:center;gap:8px;background:#122015;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px 14px;flex:1;min-width:200px">
-          <i data-lucide="search" style="width:15px;height:15px;color:rgba(255,255,255,.3)"></i>
-          <input type="search" placeholder="Search products…" style="background:transparent;border:none;outline:none;font-family:'Outfit',sans-serif;font-size:14px;color:#e2ead0;flex:1" oninput="renderProducts(this.value)" aria-label="Search products" />
-        </div>
-        <select class="aform-input" style="width:auto;padding:9px 36px 9px 14px" onchange="renderProducts(''); filterByCategory(this.value)" aria-label="Filter by category">
-          <option value="">All Categories</option>
-          <option value="vegetables">Vegetables</option>
-          <option value="fruits">Fruits</option>
-        </select>
-      </div>
-
-      <div class="admin-table-wrap">
-        <div class="admin-table-head">
-          <span class="admin-table-title">Product Catalogue</span>
-          <span id="prodTableCount" style="font-size:12px;color:rgba(255,255,255,.3)"></span>
-        </div>
-        <div style="overflow-x:auto">
-          <table>
-            <thead>
-              <tr>
-                <th width="60">Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Badge</th>
-                <th>Rating</th>
-                <th width="140">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="prodTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ====== SETTINGS VIEW ====== -->
-    <div id="view_settings" class="admin-content" style="display:none">
-      <div style="max-width:640px">
-
-        <!-- Google Sheets setup -->
-        <div class="admin-panel" style="margin-bottom:20px">
-          <div class="admin-panel-head">
-            <span class="admin-panel-title">☁️ Google Sheets Integration</span>
-            <div class="gsheet-status">
-              <div class="gsheet-dot" id="settingsDot"></div>
-            </div>
-          </div>
-          <div class="admin-panel-body">
-            <div style="background:rgba(61,168,50,.08);border:1px solid rgba(61,168,50,.2);border-radius:10px;padding:16px;margin-bottom:20px;font-size:13px;color:rgba(255,255,255,.6);line-height:1.7">
-              <strong style="color:#6bbf5c">How to connect:</strong><br/>
-              1. Open your Google Sheet → <strong>Extensions → Apps Script</strong><br/>
-              2. Paste the script from <code style="background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px">js/gsheet.js</code> (top comment)<br/>
-              3. Click <strong>Deploy → Web App → Anyone</strong><br/>
-              4. Copy the Web App URL and paste below<br/>
-              5. Your product edits here will auto-save to the Sheet!
-            </div>
-            <div class="aform-group">
-              <label class="aform-label" for="settingGsheetUrl">Google Apps Script Web App URL</label>
-              <input class="aform-input" id="settingGsheetUrl" type="url" placeholder="https://script.google.com/macros/s/AKfy.../exec" />
-            </div>
-            <div class="aform-group">
-              <label class="aform-label" for="settingWANum">WhatsApp Business Number</label>
-              <input class="aform-input" id="settingWANum" type="tel" placeholder="919424740903" value="919424740903" />
-            </div>
-            <div class="aform-group">
-              <label class="aform-label" for="settingUPI">UPI ID</label>
-              <input class="aform-input" id="settingUPI" type="text" placeholder="yourbusiness@okicici" />
-            </div>
-            <button class="abtn abtn-primary" onclick="saveSettings()">
-              <i data-lucide="save" style="width:14px"></i> Save Settings
+            <button class="abtn abtn-primary" onclick="openAddProduct()">
+              <i data-lucide="plus" style="width: 14px"></i> Add Product
             </button>
           </div>
         </div>
 
-        <!-- Export / Import -->
-        <div class="admin-panel">
-          <div class="admin-panel-head"><span class="admin-panel-title">📤 Export / Import</span></div>
-          <div class="admin-panel-body">
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <button class="abtn abtn-ghost" onclick="exportProducts()">
-                <i data-lucide="download" style="width:14px"></i> Export JSON
-              </button>
-              <label class="abtn abtn-ghost" style="cursor:pointer">
-                <i data-lucide="upload" style="width:14px"></i> Import JSON
-                <input type="file" accept=".json" style="display:none" onchange="importProducts(this)" />
-              </label>
-              <button class="abtn abtn-danger" onclick="resetToDefaults()">
-                <i data-lucide="rotate-ccw" style="width:14px"></i> Reset to Defaults
+        <!-- ====== DASHBOARD VIEW ====== -->
+        <div id="view_dash" class="admin-content">
+          <!-- Stats -->
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="stat-label">Total Products</div>
+              <div class="stat-value" id="stat_products">—</div>
+              <div class="stat-sub">In catalogue</div>
+              <span class="stat-icon">📦</span>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Vegetables</div>
+              <div class="stat-value" id="stat_veg">—</div>
+              <div class="stat-sub">Categories listed</div>
+              <span class="stat-icon">🥕</span>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Fruits</div>
+              <div class="stat-value" id="stat_fruit">—</div>
+              <div class="stat-sub">Categories listed</div>
+              <span class="stat-icon">🍎</span>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Organic Tagged</div>
+              <div class="stat-value" id="stat_organic">—</div>
+              <div class="stat-sub">With organic badge</div>
+              <span class="stat-icon">🌿</span>
+            </div>
+          </div>
+
+          <!-- Quick actions -->
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 16px;
+              margin-bottom: 28px;
+            "
+          >
+            <div class="admin-panel">
+              <div class="admin-panel-head">
+                <span class="admin-panel-title">☁️ Google Sheets Sync</span>
+              </div>
+              <div class="admin-panel-body">
+                <p
+                  style="
+                    font-size: 13px;
+                    color: rgba(255, 255, 255, 0.45);
+                    line-height: 1.6;
+                    margin-bottom: 16px;
+                  "
+                >
+                  Connect to a Google Sheet so your product prices and images
+                  stay in sync across all devices — no backend needed.
+                </p>
+                <div style="display: flex; gap: 8px">
+                  <button class="abtn abtn-primary" onclick="syncFromSheet()">
+                    <i data-lucide="download" style="width: 13px"></i> Pull from
+                    Sheet
+                  </button>
+                  <button class="abtn abtn-ghost" onclick="syncToSheet()">
+                    <i data-lucide="upload" style="width: 13px"></i> Push to
+                    Sheet
+                  </button>
+                </div>
+                <div
+                  style="
+                    margin-top: 14px;
+                    padding: 12px;
+                    background: rgba(255, 255, 255, 0.04);
+                    border-radius: 8px;
+                    font-size: 12px;
+                    color: rgba(255, 255, 255, 0.35);
+                    line-height: 1.6;
+                  "
+                >
+                  ➡️ Go to
+                  <strong style="color: rgba(255, 255, 255, 0.5)"
+                    >Settings</strong
+                  >
+                  to connect your Google Sheet URL.
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-panel">
+              <div class="admin-panel-head">
+                <span class="admin-panel-title">🛍️ Quick Actions</span>
+              </div>
+              <div
+                class="admin-panel-body"
+                style="display: flex; flex-direction: column; gap: 10px"
+              >
+                <button
+                  class="abtn abtn-primary"
+                  onclick="openAddProduct()"
+                  style="justify-content: flex-start"
+                >
+                  <i data-lucide="plus-circle" style="width: 14px"></i> Add New
+                  Product
+                </button>
+                <a
+                  href="../public/shop.html"
+                  target="_blank"
+                  style="text-decoration: none"
+                >
+                  <button
+                    class="abtn abtn-ghost"
+                    style="width: 100%; justify-content: flex-start"
+                  >
+                    <i data-lucide="external-link" style="width: 14px"></i>
+                    Preview Shop
+                  </button>
+                </a>
+                <a
+                  href="../public/index.html"
+                  target="_blank"
+                  style="text-decoration: none"
+                >
+                  <button
+                    class="abtn abtn-ghost"
+                    style="width: 100%; justify-content: flex-start"
+                  >
+                    <i data-lucide="home" style="width: 14px"></i> Preview
+                    Homepage
+                  </button>
+                </a>
+                <button
+                  class="abtn abtn-amber"
+                  onclick="showAdminView('products')"
+                  style="justify-content: flex-start"
+                >
+                  <i data-lucide="edit-3" style="width: 14px"></i> Edit All
+                  Prices
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent products -->
+          <div class="admin-table-wrap">
+            <div class="admin-table-head">
+              <span class="admin-table-title">Recent Products</span>
+              <button
+                class="abtn abtn-ghost abtn-sm"
+                onclick="showAdminView('products')"
+              >
+                View All →
               </button>
             </div>
-            <p style="font-size:12px;color:rgba(255,255,255,.3);margin-top:12px;line-height:1.6">Export creates a JSON backup of all your products. Use Import to restore or bulk-upload products.</p>
+            <div style="padding: 0 24px" id="recentProds"></div>
           </div>
         </div>
+
+        <!-- ====== PRODUCTS VIEW ====== -->
+        <div id="view_products" class="admin-content" style="display: none">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: 20px;
+              flex-wrap: wrap;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                background: #122015;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+                padding: 9px 14px;
+                flex: 1;
+                min-width: 200px;
+              "
+            >
+              <i
+                data-lucide="search"
+                style="
+                  width: 15px;
+                  height: 15px;
+                  color: rgba(255, 255, 255, 0.3);
+                "
+              ></i>
+              <input
+                type="search"
+                placeholder="Search products…"
+                style="
+                  background: transparent;
+                  border: none;
+                  outline: none;
+                  font-family: &quot;Outfit&quot;, sans-serif;
+                  font-size: 14px;
+                  color: #e2ead0;
+                  flex: 1;
+                "
+                oninput="renderProducts(this.value)"
+                aria-label="Search products"
+              />
+            </div>
+            <select
+              class="aform-input"
+              style="width: auto; padding: 9px 36px 9px 14px"
+              onchange="
+                renderProducts('');
+                filterByCategory(this.value);
+              "
+              aria-label="Filter by category"
+            >
+              <option value="">All Categories</option>
+              <option value="vegetables">Vegetables</option>
+              <option value="fruits">Fruits</option>
+            </select>
+          </div>
+
+          <div class="admin-table-wrap">
+            <div class="admin-table-head">
+              <span class="admin-table-title">Product Catalogue</span>
+              <span
+                id="prodTableCount"
+                style="font-size: 12px; color: rgba(255, 255, 255, 0.3)"
+              ></span>
+            </div>
+            <div style="overflow-x: auto">
+              <table>
+                <thead>
+                  <tr>
+                    <th width="60">Image</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Badge</th>
+                    <th>Rating</th>
+                    <th width="140">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="prodTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== SETTINGS VIEW ====== -->
+        <div id="view_settings" class="admin-content" style="display: none">
+          <div style="max-width: 640px">
+            <!-- Google Sheets setup -->
+            <div class="admin-panel" style="margin-bottom: 20px">
+              <div class="admin-panel-head">
+                <span class="admin-panel-title"
+                  >☁️ Google Sheets Integration</span
+                >
+                <div class="gsheet-status">
+                  <div class="gsheet-dot" id="settingsDot"></div>
+                </div>
+              </div>
+              <div class="admin-panel-body">
+                <div
+                  style="
+                    background: rgba(61, 168, 50, 0.08);
+                    border: 1px solid rgba(61, 168, 50, 0.2);
+                    border-radius: 10px;
+                    padding: 16px;
+                    margin-bottom: 20px;
+                    font-size: 13px;
+                    color: rgba(255, 255, 255, 0.6);
+                    line-height: 1.7;
+                  "
+                >
+                  <strong style="color: #6bbf5c">How to connect:</strong><br />
+                  1. Open your Google Sheet →
+                  <strong>Extensions → Apps Script</strong><br />
+                  2. Paste the script from
+                  <code
+                    style="
+                      background: rgba(255, 255, 255, 0.08);
+                      padding: 1px 5px;
+                      border-radius: 4px;
+                    "
+                    >js/gsheet.js</code
+                  >
+                  (top comment)<br />
+                  3. Click <strong>Deploy → Web App → Anyone</strong><br />
+                  4. Copy the Web App URL and paste below<br />
+                  5. Your product edits here will auto-save to the Sheet!
+                </div>
+                <div class="aform-group">
+                  <label class="aform-label" for="settingGsheetUrl"
+                    >Google Apps Script Web App URL</label
+                  >
+                  <input
+                    class="aform-input"
+                    id="settingGsheetUrl"
+                    type="url"
+                    placeholder="https://script.google.com/macros/s/AKfy.../exec"
+                  />
+                </div>
+                <div class="aform-group">
+                  <label class="aform-label" for="settingWANum"
+                    >WhatsApp Business Number</label
+                  >
+                  <input
+                    class="aform-input"
+                    id="settingWANum"
+                    type="tel"
+                    placeholder="919424740903"
+                    value="919424740903"
+                  />
+                </div>
+                <div class="aform-group">
+                  <label class="aform-label" for="settingUPI">UPI ID</label>
+                  <input
+                    class="aform-input"
+                    id="settingUPI"
+                    type="text"
+                    placeholder="yourbusiness@okicici"
+                  />
+                </div>
+                <button class="abtn abtn-primary" onclick="saveSettings()">
+                  <i data-lucide="save" style="width: 14px"></i> Save Settings
+                </button>
+              </div>
+            </div>
+
+            <!-- Export / Import -->
+            <div class="admin-panel">
+              <div class="admin-panel-head">
+                <span class="admin-panel-title">📤 Export / Import</span>
+              </div>
+              <div class="admin-panel-body">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <button class="abtn abtn-ghost" onclick="exportProducts()">
+                    <i data-lucide="download" style="width: 14px"></i> Export
+                    JSON
+                  </button>
+                  <label class="abtn abtn-ghost" style="cursor: pointer">
+                    <i data-lucide="upload" style="width: 14px"></i> Import JSON
+                    <input
+                      type="file"
+                      accept=".json"
+                      style="display: none"
+                      onchange="importProducts(this)"
+                    />
+                  </label>
+                  <button class="abtn abtn-danger" onclick="resetToDefaults()">
+                    <i data-lucide="rotate-ccw" style="width: 14px"></i> Reset
+                    to Defaults
+                  </button>
+                </div>
+                <p
+                  style="
+                    font-size: 12px;
+                    color: rgba(255, 255, 255, 0.3);
+                    margin-top: 12px;
+                    line-height: 1.6;
+                  "
+                >
+                  Export creates a JSON backup of all your products. Use Import
+                  to restore or bulk-upload products.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- ====== PRODUCT MODAL ====== -->
+    <div
+      class="admin-modal-bg"
+      id="productModal"
+      onclick="if (event.target === this) closeModal('productModal');"
+    >
+      <div class="admin-modal">
+        <div class="admin-modal-head">
+          <div class="admin-modal-title" id="modalTitle">Add Product</div>
+          <button
+            class="admin-modal-close"
+            onclick="closeModal('productModal')"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="admin-modal-body">
+          <input type="hidden" id="pId" />
+          <div class="aform-row">
+            <div class="aform-group">
+              <label class="aform-label" for="pName">Product Name *</label>
+              <input
+                class="aform-input"
+                id="pName"
+                type="text"
+                placeholder="e.g. Desi Tomatoes"
+              />
+            </div>
+            <div class="aform-group">
+              <label class="aform-label" for="pEmoji">Emoji</label>
+              <input
+                class="aform-input"
+                id="pEmoji"
+                type="text"
+                placeholder="🍅"
+                maxlength="4"
+              />
+            </div>
+          </div>
+          <div class="aform-row">
+            <div class="aform-group">
+              <label class="aform-label" for="pCategory">Category *</label>
+              <select class="aform-input" id="pCategory">
+                <option value="vegetables">Vegetables</option>
+                <option value="fruits">Fruits</option>
+              </select>
+            </div>
+            <div class="aform-group">
+              <label class="aform-label" for="pUnit">Unit *</label>
+              <select class="aform-input" id="pUnit">
+                <option value="kg">kg</option>
+                <option value="bunch">bunch</option>
+                <option value="piece">piece</option>
+                <option value="dozen">dozen</option>
+                <option value="250g">250g</option>
+                <option value="500g">500g</option>
+                <option value="litre">litre</option>
+              </select>
+            </div>
+          </div>
+          <div class="aform-row">
+            <div class="aform-group">
+              <label class="aform-label" for="pPrice">Price (₹) *</label>
+              <input
+                class="aform-input"
+                id="pPrice"
+                type="number"
+                placeholder="45"
+                min="1"
+              />
+            </div>
+            <div class="aform-group">
+              <label class="aform-label" for="pDiscountPrice"
+                >Discount Price (₹)</label
+              >
+              <input
+                class="aform-input"
+                id="pDiscountPrice"
+                type="number"
+                placeholder="Optional"
+                min="1"
+              />
+            </div>
+          </div>
+          <div class="aform-group">
+            <label class="aform-label" for="pFarm">Farm Name</label>
+            <input
+              class="aform-input"
+              id="pFarm"
+              type="text"
+              placeholder="e.g. Ramesh Farms, Nashik"
+            />
+          </div>
+          <div class="aform-row">
+            <div class="aform-group">
+              <label class="aform-label" for="pBadge">Badge</label>
+              <select class="aform-input" id="pBadge">
+                <option value="">None</option>
+                <option value="organic">Organic</option>
+                <option value="new">New</option>
+                <option value="sale">Sale</option>
+                <option value="hot">Hot</option>
+              </select>
+            </div>
+            <div class="aform-group">
+              <label class="aform-label" for="pRating">Rating (1–5)</label>
+              <input
+                class="aform-input"
+                id="pRating"
+                type="number"
+                placeholder="4.5"
+                min="1"
+                max="5"
+                step="0.1"
+              />
+            </div>
+          </div>
+          <div class="aform-group">
+            <label class="aform-label" for="pDesc">Description</label>
+            <textarea
+              class="aform-input"
+              id="pDesc"
+              rows="2"
+              placeholder="Brief product description…"
+              style="resize: vertical"
+            ></textarea>
+          </div>
+          <div class="aform-group">
+            <label class="aform-label" for="pImage">Image URL</label>
+            <input
+              class="aform-input"
+              id="pImage"
+              type="url"
+              placeholder="https://images.unsplash.com/…"
+              oninput="updateImagePreview(this.value)"
+            />
+            <img
+              id="imgPreview"
+              class="img-preview"
+              style="display: none"
+              alt="Preview"
+              onerror="this.style.display = 'none'"
+            />
+          </div>
+          <div class="aform-group">
+            <label class="aform-label" for="pReviews">Review Count</label>
+            <input
+              class="aform-input"
+              id="pReviews"
+              type="number"
+              placeholder="100"
+              min="0"
+            />
+          </div>
+        </div>
+        <div class="admin-modal-foot">
+          <button class="abtn abtn-ghost" onclick="closeModal('productModal')">
+            Cancel
+          </button>
+          <button class="abtn abtn-primary" onclick="saveProduct()">
+            <i data-lucide="save" style="width: 14px"></i> Save Product
+          </button>
+        </div>
       </div>
     </div>
 
-  </main>
-</div>
+    <!-- Toast -->
+    <div
+      id="adminToast"
+      style="
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #122015;
+        border: 1px solid rgba(61, 168, 50, 0.3);
+        color: #6bbf5c;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        z-index: 9999;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.3s;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+      "
+    ></div>
 
-<!-- ====== PRODUCT MODAL ====== -->
-<div class="admin-modal-bg" id="productModal" onclick="if(event.target===this)closeModal('productModal')">
-  <div class="admin-modal">
-    <div class="admin-modal-head">
-      <div class="admin-modal-title" id="modalTitle">Add Product</div>
-      <button class="admin-modal-close" onclick="closeModal('productModal')">✕</button>
-    </div>
-    <div class="admin-modal-body">
-      <input type="hidden" id="pId" />
-      <div class="aform-row">
-        <div class="aform-group">
-          <label class="aform-label" for="pName">Product Name *</label>
-          <input class="aform-input" id="pName" type="text" placeholder="e.g. Desi Tomatoes" />
-        </div>
-        <div class="aform-group">
-          <label class="aform-label" for="pEmoji">Emoji</label>
-          <input class="aform-input" id="pEmoji" type="text" placeholder="🍅" maxlength="4" />
-        </div>
-      </div>
-      <div class="aform-row">
-        <div class="aform-group">
-          <label class="aform-label" for="pCategory">Category *</label>
-          <select class="aform-input" id="pCategory">
-            <option value="vegetables">Vegetables</option>
-            <option value="fruits">Fruits</option>
-          </select>
-        </div>
-        <div class="aform-group">
-          <label class="aform-label" for="pUnit">Unit *</label>
-          <select class="aform-input" id="pUnit">
-            <option value="kg">kg</option>
-            <option value="bunch">bunch</option>
-            <option value="piece">piece</option>
-            <option value="dozen">dozen</option>
-            <option value="250g">250g</option>
-            <option value="500g">500g</option>
-            <option value="litre">litre</option>
-          </select>
-        </div>
-      </div>
-      <div class="aform-row">
-        <div class="aform-group">
-          <label class="aform-label" for="pPrice">Price (₹) *</label>
-          <input class="aform-input" id="pPrice" type="number" placeholder="45" min="1" />
-        </div>
-        <div class="aform-group">
-          <label class="aform-label" for="pDiscountPrice">Discount Price (₹)</label>
-          <input class="aform-input" id="pDiscountPrice" type="number" placeholder="Optional" min="1" />
-        </div>
-      </div>
-      <div class="aform-group">
-        <label class="aform-label" for="pFarm">Farm Name</label>
-        <input class="aform-input" id="pFarm" type="text" placeholder="e.g. Ramesh Farms, Nashik" />
-      </div>
-      <div class="aform-row">
-        <div class="aform-group">
-          <label class="aform-label" for="pBadge">Badge</label>
-          <select class="aform-input" id="pBadge">
-            <option value="">None</option>
-            <option value="organic">Organic</option>
-            <option value="new">New</option>
-            <option value="sale">Sale</option>
-            <option value="hot">Hot</option>
-          </select>
-        </div>
-        <div class="aform-group">
-          <label class="aform-label" for="pRating">Rating (1–5)</label>
-          <input class="aform-input" id="pRating" type="number" placeholder="4.5" min="1" max="5" step="0.1" />
-        </div>
-      </div>
-      <div class="aform-group">
-        <label class="aform-label" for="pDesc">Description</label>
-        <textarea class="aform-input" id="pDesc" rows="2" placeholder="Brief product description…" style="resize:vertical"></textarea>
-      </div>
-      <div class="aform-group">
-        <label class="aform-label" for="pImage">Image URL</label>
-        <input class="aform-input" id="pImage" type="url" placeholder="https://images.unsplash.com/…" oninput="updateImagePreview(this.value)" />
-        <img id="imgPreview" class="img-preview" style="display:none" alt="Preview" onerror="this.style.display='none'" />
-      </div>
-      <div class="aform-group">
-        <label class="aform-label" for="pReviews">Review Count</label>
-        <input class="aform-input" id="pReviews" type="number" placeholder="100" min="0" />
-      </div>
-    </div>
-    <div class="admin-modal-foot">
-      <button class="abtn abtn-ghost" onclick="closeModal('productModal')">Cancel</button>
-      <button class="abtn abtn-primary" onclick="saveProduct()">
-        <i data-lucide="save" style="width:14px"></i> Save Product
-      </button>
-    </div>
-  </div>
-</div>
+    <script src="../js/config.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/gsheet.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        if (typeof lucide !== "undefined") lucide.createIcons();
+      });
 
-<!-- Toast -->
-<div id="adminToast" style="position:fixed;bottom:24px;right:24px;background:#122015;border:1px solid rgba(61,168,50,.3);color:#6bbf5c;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;opacity:0;transform:translateY(10px);transition:all .3s;box-shadow:0 8px 28px rgba(0,0,0,.4)"></div>
-
-<script src="../js/config.js"></script>
-<script src="../js/cart.js"></script>
-<script src="../js/gsheet.js"></script>
-<script src="../js/admin.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-  });
-
-  function filterByCategory(cat) {
-    renderProducts(cat ? '' : '');
-    if (cat) {
-      const all = adminProducts.filter(p => !cat || p.category === cat);
-      const tbody = document.getElementById('prodTableBody');
-      if (!tbody) return;
-      tbody.innerHTML = all.map(p => `
+      function filterByCategory(cat) {
+        renderProducts(cat ? "" : "");
+        if (cat) {
+          const all = adminProducts.filter((p) => !cat || p.category === cat);
+          const tbody = document.getElementById("prodTableBody");
+          if (!tbody) return;
+          tbody.innerHTML = all
+            .map(
+              (p) => `
         <tr>
           <td><img src="${escHtml(p.image)}" class="prod-thumb" onerror="this.style.opacity='.3'" /></td>
           <td><div style="font-weight:600;color:#e2ead0">${escHtml(p.name)}</div><div style="font-size:11px;color:rgba(255,255,255,.3)">${escHtml(p.farm)}</div></td>
           <td><span style="text-transform:capitalize;color:rgba(255,255,255,.5)">${p.category}</span></td>
           <td style="font-weight:700;color:#6bbf5c">₹${p.price}<span style="font-weight:400;font-size:11px;color:rgba(255,255,255,.3)">/${p.unit}</span></td>
-          <td>${p.badge?`<span class="badge-pill badge-${p.badge}">${p.badge}</span>`:'<span class="badge-pill badge-none">—</span>'}</td>
+          <td>${p.badge ? `<span class="badge-pill badge-${p.badge}">${p.badge}</span>` : '<span class="badge-pill badge-none">—</span>'}</td>
           <td style="font-size:13px">⭐ ${p.rating} <span style="color:rgba(255,255,255,.3)">(${p.reviews})</span></td>
           <td><div style="display:flex;gap:6px"><button class="abtn abtn-ghost abtn-sm" onclick="openEdit('${p.id}')">✏️ Edit</button><button class="abtn abtn-danger abtn-sm" onclick="deleteProduct('${p.id}')">🗑</button></div></td>
-        </tr>`).join('');
-    }
-  }
+        </tr>`,
+            )
+            .join("");
+        }
+      }
 
-  function exportProducts() {
-    const data = JSON.stringify(adminProducts, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
-    const url  = URL.createObjectURL(blob);
-    const a    = Object.assign(document.createElement('a'), { href: url, download: 'freshlink-products.json' });
-    a.click(); URL.revokeObjectURL(url);
-    adminToast('📤 Products exported!');
-  }
+      function exportProducts() {
+        const data = JSON.stringify(adminProducts, null, 2);
+        const blob = new Blob([data], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = Object.assign(document.createElement("a"), {
+          href: url,
+          download: "freshlink-products.json",
+        });
+        a.click();
+        URL.revokeObjectURL(url);
+        adminToast("📤 Products exported!");
+      }
 
-  function importProducts(input) {
-    const file = input.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      try {
-        const data = JSON.parse(e.target.result);
-        if (!Array.isArray(data)) throw new Error('Invalid format');
-        adminProducts = data;
+      function importProducts(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = JSON.parse(e.target.result);
+            if (!Array.isArray(data)) throw new Error("Invalid format");
+            adminProducts = data;
+            saveProductsLocal();
+            renderDash();
+            adminToast("📥 " + data.length + " products imported!");
+          } catch (err) {
+            adminToast("❌ Invalid JSON file");
+          }
+        };
+        reader.readAsText(file);
+      }
+
+      function resetToDefaults() {
+        if (
+          !confirm(
+            "Reset all products to defaults? This will lose any custom products.",
+          )
+        )
+          return;
+        adminProducts = [...DEFAULT_PRODUCTS];
         saveProductsLocal();
         renderDash();
-        adminToast('📥 ' + data.length + ' products imported!');
-      } catch(err) { adminToast('❌ Invalid JSON file'); }
-    };
-    reader.readAsText(file);
-  }
-
-  function resetToDefaults() {
-    if (!confirm('Reset all products to defaults? This will lose any custom products.')) return;
-    adminProducts = [...DEFAULT_PRODUCTS];
-    saveProductsLocal();
-    renderDash();
-    if (currentView === 'products') renderProducts();
-    adminToast('🔄 Reset to defaults!');
-  }
-</script>
-</body>
+        if (currentView === "products") renderProducts();
+        adminToast("🔄 Reset to defaults!");
+      }
+    </script>
+  </body>
 </html>
